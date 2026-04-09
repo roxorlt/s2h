@@ -12,11 +12,11 @@ Decompose any [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skil
 
 ## Example
 
-**office-hours** — a 1717-line skill with 6 phases, branching flows, and 34 external resources:
+**office-hours** — an 1825-line skill with 6 phases, branching flows, and 34 external resources:
 
 | Source | Result |
 |--------|--------|
-| [office-hours skill](https://github.com/garrytan/gstack/tree/main/office-hours) | [s2h explainer](https://roxorlt.github.io/s2h/office-hours.html) |
+| [office-hours skill](https://github.com/garrytan/gstack/tree/main/office-hours) | [s2h explainer](https://roxorlt.github.io/s2h/office-hours-en.html) |
 
 &nbsp;
 
@@ -100,7 +100,7 @@ options:
 
 ## 示例
 
-**office-hours** — 1717 行、6 个阶段、带分支流程和 34 个外部资源的复杂 skill：
+**office-hours** — 1825 行、6 个阶段、带分支流程和 34 个外部资源的复杂 skill：
 
 | 输入 | 产出 |
 |------|------|
