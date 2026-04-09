@@ -14,7 +14,7 @@ Decompose any [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skil
 
 | Source | Result |
 |--------|--------|
-| [SKILL.md](https://github.com/garryslist/gstack/blob/main/office-hours/SKILL.md) | [Live demo](https://roxorlt.github.io/s2h/office-hours.html) |
+| 1717-line SKILL.md (private repo) | [Live demo](https://roxorlt.github.io/s2h/office-hours.html) |
 
 ## What you get
 
@@ -90,7 +90,7 @@ options:
 
 | 输入 | 产出 |
 |------|------|
-| [SKILL.md 原文](https://github.com/garryslist/gstack/blob/main/office-hours/SKILL.md) | [在线查看拆解结果](https://roxorlt.github.io/s2h/office-hours.html) |
+| 1717 行 SKILL.md（私有仓库） | [在线查看拆解结果](https://roxorlt.github.io/s2h/office-hours.html) |
 
 ## 产出什么
 
