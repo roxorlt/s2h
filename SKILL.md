@@ -680,17 +680,17 @@ fi
   <style>/* 内联 CSS — 参见 s2h.css */</style>
 </head>
 <body>
-  <header>
-    <!-- 一句话定位（≤40中文字）+ 统计卡片 -->
-  </header>
-
   <nav class="s2h-nav">
-    <!-- 四锚点导航（sticky，非 tab 切换，不隐藏内容） -->
+    <!-- 四锚点导航（sticky，页面最顶部，非 tab 切换，不隐藏内容） -->
     <a href="#overview">{nav_overview}</a>
     <a href="#walkthrough">{nav_walkthrough}</a>
     <a href="#trust">{nav_trust}</a>
     <a href="#context">{nav_context}</a>
   </nav>
+
+  <header>
+    <!-- 一句话定位（≤40中文字）+ 统计卡片 -->
+  </header>
 
   <section id="overview">
     <!-- 流程总览 Mermaid 图 -->

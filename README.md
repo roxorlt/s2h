@@ -58,7 +58,11 @@ options:
 
 ## Example
 
-See [examples/office-hours.html](examples/office-hours.html) — a 1717-line branching skill decomposed into an interactive explainer.
+**office-hours** — a 1717-line skill with 6 phases, branching flows, and 34 external resources:
+
+| Source | Result |
+|--------|--------|
+| [SKILL.md](https://github.com/garryslist/gstack/blob/main/office-hours/SKILL.md) | [Live demo](https://roxorlt.github.io/s2h/office-hours.html) |
 
 ## License
 
@@ -122,7 +126,11 @@ curl -fsSL https://raw.githubusercontent.com/roxorlt/s2h/main/install.sh | bash
 
 ## 示例
 
-看 [examples/office-hours.html](examples/office-hours.html) — 一个 1717 行、带多分支的复杂 skill 被拆解成交互式页面的效果。
+**office-hours** — 1717 行、6 个阶段、带分支流程和 34 个外部资源的复杂 skill：
+
+| 输入 | 产出 |
+|------|------|
+| [SKILL.md 原文](https://github.com/garryslist/gstack/blob/main/office-hours/SKILL.md) | [在线查看拆解结果](https://roxorlt.github.io/s2h/office-hours.html) |
 
 ## 协议
 
