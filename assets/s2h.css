@@ -1,0 +1,337 @@
+/*
+ * s2h.css — Skill-to-HTML Design System
+ *
+ * Inspired by Anthropic docs (warm gray, HSL tokens, serif headings,
+ * dark-mode weight reduction) + CJK best practices.
+ *
+ * Semantic palette: warm-gray (neutral) + blue (primary/accent)
+ *   + orange (input/upstream) + green (output/success)
+ *   + red (risk) + yellow (caution)
+ *
+ * Layout: max-width 860px, generous whitespace, responsive
+ */
+
+/* === Reset === */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* === Variables (Light — Anthropic warm gray) === */
+:root{
+  /* Warm neutrals — hue 48-50, slight yellow tint like Anthropic */
+  --bg-0:hsl(0 0% 100%);
+  --bg-1:hsl(48 33% 97%);           /* page bg — warm off-white */
+  --bg-2:hsl(53 29% 95%);           /* sidebar, card bg */
+  --bg-3:hsl(48 25% 92%);           /* hover, muted bg */
+  --bg-4:hsl(50 21% 89%);           /* active bg */
+
+  --text-0:hsl(60 3% 8%);           /* headings, primary text */
+  --text-1:hsl(60 3% 23%);          /* body text */
+  --text-2:hsl(51 3% 44%);          /* secondary text */
+  --text-3:hsl(48 5% 59%);          /* muted text, meta */
+  --text-4:hsl(48 4% 73%);          /* disabled, placeholder */
+
+  --border-1:hsl(30 3% 12% / .08);  /* subtle border */
+  --border-2:hsl(30 3% 12% / .12);  /* default border */
+  --border-3:hsl(30 3% 12% / .18);  /* strong border */
+
+  /* Blue (primary accent) */
+  --accent:hsl(210 74% 40%);
+  --accent-light:hsl(210 71% 52%);
+  --accent-bg:hsl(210 70% 96%);
+  --accent-border:hsl(210 60% 88%);
+
+  /* Orange (input / upstream) */
+  --orange:hsl(25 95% 53%);
+  --orange-bg:hsl(30 100% 97%);
+  --orange-border:hsl(30 80% 90%);
+  --orange-text:hsl(20 80% 42%);
+
+  /* Green (output / success) */
+  --green:hsl(142 71% 45%);
+  --green-bg:hsl(140 60% 97%);
+  --green-border:hsl(140 40% 88% / .6);
+  --green-text:hsl(142 64% 34%);
+
+  /* Red (risk / warning) */
+  --red:hsl(0 84% 60%);
+  --red-bg:hsl(0 86% 97%);
+  --red-border:hsl(0 70% 90%);
+  --red-text:hsl(0 72% 43%);
+
+  /* Yellow (caution / medium risk) */
+  --yellow:hsl(48 96% 53%);
+  --yellow-bg:hsl(48 92% 95%);
+  --yellow-text:hsl(40 75% 38%);
+
+  /* Shared */
+  --radius:10px;
+  --radius-sm:6px;
+  --radius-xs:4px;
+  --shadow-sm:0 1px 2px hsl(0 0% 0% / .04);
+  --shadow-md:0 2px 8px hsl(0 0% 0% / .06), 0 0 1px hsl(0 0% 0% / .04);
+  --content-w:860px;
+}
+
+/* === Dark mode === */
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg-0:hsl(60 3% 18%);
+    --bg-1:hsl(60 3% 15%);
+    --bg-2:hsl(30 3% 12%);
+    --bg-3:hsl(60 3% 8%);
+    --bg-4:hsl(0 0% 0%);
+
+    --text-0:hsl(48 33% 97%);
+    --text-1:hsl(50 9% 83%);
+    --text-2:hsl(50 9% 74%);
+    --text-3:hsl(48 5% 59%);
+    --text-4:hsl(48 4% 44%);
+
+    --border-1:hsl(48 10% 90% / .06);
+    --border-2:hsl(48 10% 90% / .10);
+    --border-3:hsl(48 10% 90% / .16);
+
+    --accent-bg:hsl(210 40% 16%);
+    --accent-border:hsl(210 30% 28%);
+    --orange-bg:hsl(25 30% 12%);
+    --orange-border:hsl(25 25% 20%);
+    --green-bg:hsl(140 25% 10%);
+    --green-border:hsl(140 20% 18%);
+    --red-bg:hsl(0 25% 12%);
+    --red-border:hsl(0 20% 18%);
+    --yellow-bg:hsl(48 25% 10%);
+
+    --shadow-sm:0 1px 2px hsl(0 0% 0% / .2);
+    --shadow-md:0 2px 8px hsl(0 0% 0% / .25), 0 0 1px hsl(0 0% 0% / .15);
+  }
+}
+
+/* === Typography === */
+body{
+  font-family:
+    -apple-system, BlinkMacSystemFont,
+    "Segoe UI",
+    "PingFang SC", "PingFang TC", "PingFang HK",
+    "Microsoft YaHei", "Microsoft JhengHei",
+    "Noto Sans CJK SC", "Noto Sans CJK TC",
+    "Hiragino Sans", "Hiragino Kaku Gothic Pro",
+    "Helvetica Neue", Arial, sans-serif;
+  background:var(--bg-1);
+  color:var(--text-1);
+  font-size:16px;
+  line-height:1.75;
+  font-weight:430;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Headings: serif flavor for h2/h3 (like Anthropic uses serif for depth) */
+h1,h2,h3{
+  font-family:
+    Georgia, "Noto Serif CJK SC", "Noto Serif CJK TC",
+    "Source Han Serif SC", "Source Han Serif CN",
+    "Songti SC", "SimSun",
+    serif;
+  color:var(--text-0);
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+
+h4,h5,h6{
+  color:var(--text-0);
+  font-weight:580;
+}
+
+/* Dark mode: reduce font weights to avoid over-bold on dark bg */
+@media(prefers-color-scheme:dark){
+  body{font-weight:400}
+  h1,h2,h3{font-weight:540}
+  h4,h5,h6{font-weight:520}
+  strong,b{font-weight:530}
+  .s2h-letter{background:hsl(48 20% calc(38% - var(--i) * 2.5%))}
+  .s2h-nav{background:var(--bg-0)}
+}
+
+code, pre{
+  font-family:
+    "SF Mono", "Fira Code", "Fira Mono",
+    "Cascadia Code", "Consolas",
+    "Ubuntu Mono", "DejaVu Sans Mono",
+    monospace;
+  font-size:14px;
+}
+
+/* Inline code */
+:not(pre) > code{
+  background:var(--bg-3);
+  padding:1px 5px;
+  border-radius:var(--radius-xs);
+  font-size:14px;
+}
+
+/* === Layout === */
+.s2h-wrap{max-width:var(--content-w);margin:0 auto;padding:0 32px}
+@media(max-width:640px){.s2h-wrap{padding:0 16px}}
+
+/* === Hero === */
+.s2h-hero{padding:72px 0 44px;text-align:center}
+.s2h-hero h1{font-size:32px;line-height:1.3;margin-bottom:14px}
+.s2h-hero .s2h-subtitle{font-size:17px;color:var(--text-2);max-width:600px;margin:0 auto;line-height:1.7;text-wrap:balance}
+.s2h-hero .s2h-meta{font-size:12px;color:var(--text-3);margin-top:12px}
+
+/* === Stats bar === */
+.s2h-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px;margin-bottom:44px}
+.s2h-stat{background:var(--bg-0);border:1px solid var(--border-2);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow-sm)}
+.s2h-stat .v{font-size:28px;font-weight:600;color:var(--text-0)}
+.s2h-stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+
+/* === Section === */
+.s2h-section{padding:48px 0;border-top:1px solid var(--border-2)}
+.s2h-section h2{font-size:22px;margin-bottom:4px}
+.s2h-section h2 .n{color:var(--accent);margin-right:6px}
+.s2h-section .s2h-desc{color:var(--text-2);font-size:15px;margin-bottom:28px;line-height:1.7}
+
+/* === Cards (generic) === */
+.s2h-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+@media(max-width:640px){.s2h-grid{grid-template-columns:1fr}}
+.s2h-card{background:var(--bg-0);border:1px solid var(--border-2);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+.s2h-card h3{font-size:15px;font-weight:580;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.s2h-card ul{list-style:none;font-size:14px;color:var(--text-2)}
+.s2h-card ul li{padding:4px 0 4px 16px;position:relative}
+.s2h-card ul li::before{content:'';position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--text-4)}
+
+/* Card variants — left accent border */
+.s2h-card.risk{border-left:3px solid var(--red)}
+.s2h-card.safe{border-left:3px solid var(--green)}
+.s2h-card.warn{border-left:3px solid var(--yellow)}
+.s2h-card.info{border-left:3px solid var(--accent)}
+
+/* === Layer nav tabs === */
+/* Anchor navigation (sticky, replaces old tab system) */
+.s2h-nav{position:sticky;top:0;z-index:100;display:flex;gap:0;background:var(--bg-0);border-bottom:1px solid var(--border-2);padding:0 24px}
+.s2h-nav a{padding:12px 20px;font-size:13px;font-weight:550;color:var(--text-3);text-decoration:none;border-bottom:2px solid transparent;transition:color .15s, border-color .15s}
+.s2h-nav a:hover{color:var(--text-0)}
+.s2h-nav a.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* Long list collapse */
+.s2h-list-capped li:nth-child(n+6){display:none}
+.s2h-list-capped.expanded li{display:list-item !important}
+.btn-show-more{display:inline-block;margin:8px 0 0 24px;padding:4px 12px;font-size:13px;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:4px;cursor:pointer;font-weight:500}
+.btn-show-more:hover{background:var(--bg-3)}
+
+/* Footer — author wave animation */
+.s2h-author{color:inherit;text-decoration:none;border-bottom:1px solid var(--border-1)}
+.s2h-author:hover{border-bottom-color:var(--text-3)}
+.s2h-author span{display:inline-block}
+.s2h-author:hover span{animation:s2h-wave .5s ease both;animation-delay:calc(var(--i) * .07s)}
+@keyframes s2h-wave{0%{transform:translateY(0) rotateY(0)}40%{transform:translateY(-4px) rotateY(180deg)}100%{transform:translateY(0) rotateY(360deg)}}
+
+/* === Pipeline step nav === */
+.s2h-pipe{display:flex;gap:3px;margin-bottom:4px;overflow-x:auto;padding:2px 0}
+.s2h-pipe-item{flex:1;min-width:82px;background:var(--bg-0);border:1px solid var(--border-2);border-radius:8px;padding:12px 8px;text-align:center;cursor:pointer;transition:border-color .15s, background .15s}
+.s2h-pipe-item:hover,.s2h-pipe-item.on{border-color:var(--accent-light);background:var(--accent-bg)}
+.s2h-pipe-item .num{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.5px}
+.s2h-pipe-item .name{font-size:11px;font-weight:550;color:var(--text-0)}
+
+/* === Step detail panel === */
+.s2h-step{background:var(--bg-0);border:1px solid var(--border-2);border-radius:var(--radius);padding:0;margin-bottom:20px;display:none;overflow:hidden;box-shadow:var(--shadow-sm)}
+.s2h-step.vis{display:block}
+.s2h-step-head{padding:28px 28px 0}
+.s2h-step-head h4{font-size:18px;font-weight:600;margin-bottom:6px;color:var(--text-0)}
+.s2h-step-head .purpose{font-size:15px;color:var(--text-2);margin-bottom:16px;line-height:1.7}
+
+/* I/O boxes */
+.s2h-io{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 28px 20px}
+@media(max-width:640px){.s2h-io{grid-template-columns:1fr}}
+.s2h-io-box{padding:14px 16px;border-radius:8px;font-size:14px}
+.s2h-io-box.in{background:var(--orange-bg);border:1px solid var(--orange-border)}
+.s2h-io-box.out{background:var(--green-bg);border:1px solid var(--green-border)}
+.s2h-io-label{font-size:11px;font-weight:600;letter-spacing:.5px;margin-bottom:4px;text-transform:uppercase}
+.s2h-io-box.in .s2h-io-label{color:var(--orange-text)}
+.s2h-io-box.out .s2h-io-label{color:var(--green-text)}
+.s2h-io-box code{font-size:13px;background:hsl(0 0% 0% / .04);padding:1px 5px;border-radius:3px}
+
+/* Code example */
+.s2h-example{padding:0 28px 24px}
+.s2h-example .ex-label{font-size:12px;font-weight:600;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.s2h-example pre{
+  background:var(--text-0);color:hsl(48 33% 97%);border-radius:8px;padding:16px 20px;
+  font-size:13px;line-height:1.6;overflow-x:auto;
+}
+/* Syntax colors (dark bg) */
+.s2h-example pre .cm{color:hsl(220 9% 46%)}  /* comment */
+.s2h-example pre .kw{color:hsl(213 94% 78%)} /* keyword/key */
+.s2h-example pre .st{color:hsl(142 77% 73%)} /* string value */
+.s2h-example pre .nu{color:hsl(45 93% 58%)}  /* number */
+.s2h-example pre .fn{color:hsl(262 83% 82%)} /* function */
+
+/* === Collapsible === */
+.s2h-collapse{background:var(--bg-0);border:1px solid var(--border-2);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.s2h-collapse-head{padding:20px 24px;display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;transition:background .15s}
+.s2h-collapse-head:hover{background:var(--bg-3)}
+.s2h-collapse-arrow{margin-left:auto;color:var(--text-3);transition:transform .2s;font-size:13px}
+.s2h-collapse.open .s2h-collapse-arrow{transform:rotate(90deg)}
+.s2h-collapse-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.s2h-collapse.open .s2h-collapse-body{max-height:3000px}
+.s2h-collapse-inner{padding:0 24px 24px}
+
+/* === Callout (Anthropic-style info/warn boxes) === */
+.s2h-callout{display:flex;gap:12px;margin:16px 0;border-radius:12px;border:1px solid var(--border-2);background:var(--bg-2);padding:14px 16px 14px 0;font-size:14px;color:var(--text-1);box-shadow:var(--shadow-md);overflow:hidden}
+.s2h-callout-bar{width:3px;border-radius:2px;flex-shrink:0}
+.s2h-callout.info .s2h-callout-bar{background:var(--accent)}
+.s2h-callout.warn .s2h-callout-bar{background:var(--yellow)}
+.s2h-callout.danger .s2h-callout-bar{background:var(--red)}
+.s2h-callout.tip .s2h-callout-bar{background:var(--green)}
+.s2h-callout-icon{flex-shrink:0;width:20px;text-align:center;font-size:16px}
+.s2h-callout-body{flex:1;min-width:0}
+.s2h-callout-body p{margin:0}
+
+/* === Security report === */
+.s2h-risk-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.5px}
+.s2h-risk-badge.low{background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)}
+.s2h-risk-badge.medium{background:var(--yellow-bg);color:var(--yellow-text);border:1px solid hsl(48 60% 80% / .3)}
+.s2h-risk-badge.high{background:var(--red-bg);color:var(--red-text);border:1px solid var(--red-border)}
+
+.s2h-finding{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;border-radius:8px;margin-bottom:8px;font-size:14px;background:var(--bg-2)}
+.s2h-finding-icon{flex-shrink:0;width:24px;text-align:center;font-size:16px}
+.s2h-finding-line{font-size:11px;color:var(--text-3);margin-left:auto;flex-shrink:0}
+
+/* === Mermaid === */
+.s2h-mermaid{margin:20px 0;text-align:center;overflow-x:auto}
+.s2h-mermaid svg{max-width:100%;height:auto}
+
+/* === Skill chain (multi-skill) === */
+.s2h-chain{display:flex;gap:0;align-items:stretch;margin-bottom:24px}
+.s2h-skill-box{flex:1;border-radius:var(--radius);padding:22px;cursor:pointer;transition:box-shadow .15s}
+.s2h-skill-box:hover{box-shadow:var(--shadow-md)}
+.s2h-skill-box.upstream{background:var(--orange-bg);border:1px solid var(--orange-border)}
+.s2h-skill-box.downstream{background:var(--accent-bg);border:1px solid var(--accent-border)}
+.s2h-skill-box .tag{font-size:11px;font-weight:600;letter-spacing:.5px;padding:2px 8px;border-radius:var(--radius-xs);display:inline-block;margin-bottom:8px}
+.s2h-skill-box.upstream .tag{background:hsl(25 95% 53% / .12);color:var(--orange-text)}
+.s2h-skill-box.downstream .tag{background:hsl(210 74% 40% / .12);color:var(--accent)}
+.s2h-chain-arrow{display:flex;align-items:center;justify-content:center;width:52px;flex-shrink:0;color:var(--text-3);font-size:11px;text-align:center}
+
+/* === Dynamic slot === */
+.s2h-dynamic{margin:24px 0;min-height:0;transition:min-height .3s}
+.s2h-dynamic:empty{display:none}
+
+/* === Footer === */
+.s2h-footer{padding:32px 0;text-align:center;color:var(--text-3);font-size:12px;border-top:1px solid var(--border-2)}
+.s2h-footer a{color:inherit;text-decoration:none}
+
+/* === Utility badges === */
+.s2h-badge{display:inline-block;font-size:11px;font-weight:550;padding:2px 8px;border-radius:var(--radius-xs)}
+.s2h-badge.blue{background:var(--accent-bg);color:var(--accent)}
+.s2h-badge.orange{background:var(--orange-bg);color:var(--orange-text)}
+.s2h-badge.green{background:var(--green-bg);color:var(--green-text)}
+.s2h-badge.red{background:var(--red-bg);color:var(--red-text)}
+.s2h-badge.gray{background:var(--bg-3);color:var(--text-2)}
+
+/* === Prose links (Anthropic style) === */
+.s2h-wrap a:not([class]){color:var(--accent);text-decoration:underline;text-decoration-color:var(--accent-border);text-underline-offset:2px;font-weight:500;transition:text-decoration-color .15s}
+.s2h-wrap a:not([class]):hover{text-decoration-color:var(--accent)}
+
+/* === Table (docs-style) === */
+.s2h-table{width:100%;border-collapse:collapse;font-size:14px;margin:16px 0}
+.s2h-table th{background:var(--bg-3);border:1px solid var(--border-2);padding:8px 16px;text-align:left;font-weight:600;color:var(--text-0);font-size:13px}
+.s2h-table td{border:1px solid var(--border-2);padding:8px 16px;color:var(--text-1)}
+.s2h-table tr:hover td{background:var(--bg-2)}
