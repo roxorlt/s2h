@@ -29,8 +29,18 @@ A self-contained HTML file with four sections:
 |---------|----------------|
 | **Overview** | What does this skill do? (one-liner + stats + flow diagram) |
 | **Walkthrough** | How does it work? (step-by-step, filtered for reader relevance) |
-| **Security Scan** | Is it safe to use? (risk level + findings + toxic flow analysis) |
+| **Security Scan** | Is it safe to use? (see below) |
 | **Context** | What else is related? (companion files, upstream/downstream skills) |
+
+### Security scan
+
+The security section runs a two-layer scan aligned with the [OWASP Top 10 for Agentic Applications](https://genai.owasp.org/resource/owasp-top-10-risks-for-ai-agents/):
+
+1. **Deterministic Python scanner** — regex + entropy analysis across the entire skill directory (not just SKILL.md). Catches secrets, `eval`/`exec`, network calls, dangerous paths, and obfuscation patterns.
+2. **LLM semantic analysis** — classifies each finding by intent (execute vs. example vs. definition), then checks 10 categories: prompt injection, data exfiltration, supply chain, secret exposure, unsafe code exec, excessive privilege, obfuscation, tool shadowing, cascading failure, and consent mechanisms.
+3. **Toxic flow detection** — flags combinations where sensitive data reads + network sends + missing user consent exist in the same skill, even if each individual finding looks harmless alone.
+
+Output: a risk badge (low / medium / high / critical) + per-finding breakdown + toxic flow analysis.
 
 ## Options
 
@@ -97,8 +107,18 @@ curl -fsSL https://raw.githubusercontent.com/roxorlt/s2h/main/install.sh | bash
 |------|-------------|
 | **概览** | 这个 skill 做什么？（一句话定位 + 关键数据 + 流程图） |
 | **逐步拆解** | 怎么运转的？（按步骤讲，只保留读者需要知道的内容） |
-| **安全扫描** | 用着放心吗？（风险等级 + 发现项 + 毒性数据流分析） |
+| **安全扫描** | 用着放心吗？（详见下方） |
 | **相关信息** | 还有什么关联的？（配套文件、上下游 skill） |
+
+### 安全扫描
+
+安全板块做两层扫描，对标 [OWASP Agentic Application Top 10](https://genai.owasp.org/resource/owasp-top-10-risks-for-ai-agents/)：
+
+1. **确定性 Python 扫描器** — 正则 + 信息熵分析，覆盖整个 skill 目录（不止 SKILL.md）。抓 secret 泄露、`eval`/`exec`、网络请求、高危路径、混淆代码。
+2. **LLM 语义分析** — 对每条发现判断意图（真的要执行 vs. 只是示例 vs. 模式定义），然后检查 10 个类别：prompt injection、数据外泄、供应链、凭证暴露、危险代码执行、过度权限、代码混淆、工具劫持、级联失控、缺少用户确认。
+3. **毒性数据流检测** — 单条发现可能风险很低，但"读敏感数据 + 网络发送 + 没有用户同意"三者同时出现就是高危组合。即使每条单独看都无害，组合起来也会被标记。
+
+产出：风险等级标签（低/中/高/严重）+ 逐条发现明细 + 毒性数据流分析。
 
 ## 参数
 
