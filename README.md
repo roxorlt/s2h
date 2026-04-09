@@ -8,13 +8,17 @@
 
 Decompose any [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill into an interactive HTML explainer page. Give s2h a SKILL.md file (local path, GitHub URL, or skills.sh link), and it produces a single-file HTML page that breaks down the skill's workflow, architecture, and security profile — readable by anyone, no prior context needed.
 
+&nbsp;
+
 ## Example
 
 **office-hours** — a 1717-line skill with 6 phases, branching flows, and 34 external resources:
 
 | Source | Result |
 |--------|--------|
-| 1717-line SKILL.md (private repo) | [Live demo](https://roxorlt.github.io/s2h/office-hours.html) |
+| [office-hours skill](https://github.com/garrytan/gstack/tree/main/office-hours) | [s2h explainer](https://roxorlt.github.io/s2h/office-hours.html) |
+
+&nbsp;
 
 ## What you get
 
@@ -37,6 +41,8 @@ The security section runs a two-layer scan aligned with the [OWASP Top 10 for Ag
 
 Output: a risk badge (low / medium / high / critical) + per-finding breakdown + toxic flow analysis.
 
+&nbsp;
+
 ## Quick start
 
 ```bash
@@ -47,6 +53,8 @@ curl -fsSL https://raw.githubusercontent.com/roxorlt/s2h/main/install.sh | bash
 /s2h ~/.claude/skills/some-skill/SKILL.md
 /s2h https://github.com/user/repo/blob/main/SKILL.md
 ```
+
+&nbsp;
 
 ## Options
 
@@ -66,11 +74,15 @@ options:
   --help           Show help
 ```
 
+&nbsp;
+
 ## Requirements
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (this is a Claude Code skill)
 - Python 3 (for the deterministic parser)
 - Internet connection (for GitHub/skills.sh sources and Mermaid CDN)
+
+&nbsp;
 
 ## License
 
@@ -84,13 +96,17 @@ options:
 
 把任意 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill 拆解为一张交互式 HTML 页面，看完就懂这个 skill 怎么运转。丢一个 SKILL.md 进来（本地路径、GitHub 链接、skills.sh 地址都行），s2h 帮你生成一份独立的 HTML，把 skill 的工作流、架构和安全状况讲清楚，不需要任何前置知识就能看懂。
 
+&nbsp;
+
 ## 示例
 
 **office-hours** — 1717 行、6 个阶段、带分支流程和 34 个外部资源的复杂 skill：
 
 | 输入 | 产出 |
 |------|------|
-| 1717 行 SKILL.md（私有仓库） | [在线查看拆解结果](https://roxorlt.github.io/s2h/office-hours.html) |
+| [office-hours skill](https://github.com/garrytan/gstack/tree/main/office-hours) | [s2h 解读结果](https://roxorlt.github.io/s2h/office-hours.html) |
+
+&nbsp;
 
 ## 产出什么
 
@@ -113,6 +129,8 @@ options:
 
 产出：风险等级标签（低/中/高/严重）+ 逐条发现明细 + 毒性数据流分析。
 
+&nbsp;
+
 ## 快速上手
 
 ```bash
@@ -123,6 +141,8 @@ curl -fsSL https://raw.githubusercontent.com/roxorlt/s2h/main/install.sh | bash
 /s2h ~/.claude/skills/some-skill/SKILL.md
 /s2h https://github.com/user/repo/blob/main/SKILL.md
 ```
+
+&nbsp;
 
 ## 参数
 
@@ -142,11 +162,15 @@ curl -fsSL https://raw.githubusercontent.com/roxorlt/s2h/main/install.sh | bash
   --help           查看帮助
 ```
 
+&nbsp;
+
 ## 依赖
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code)（这是一个 Claude Code skill）
 - Python 3（跑确定性解析器）
 - 网络连接（获取 GitHub/skills.sh 来源文件，加载 Mermaid CDN）
+
+&nbsp;
 
 ## 协议
 
