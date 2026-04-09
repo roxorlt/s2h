@@ -2,7 +2,7 @@
 set -euo pipefail
 
 S2H_DIR="$HOME/.claude/skills/s2h"
-REPO="https://github.com/roxor/s2h.git"
+REPO="https://github.com/roxorlt/s2h.git"
 
 echo "Installing s2h (Skill-to-HTML)..."
 

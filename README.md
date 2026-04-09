@@ -14,7 +14,7 @@ Decompose any [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skil
 
 ```bash
 # Install
-curl -fsSL https://raw.githubusercontent.com/roxor/s2h/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/roxorlt/s2h/main/install.sh | bash
 
 # Run inside Claude Code
 /s2h ~/.claude/skills/some-skill/SKILL.md
@@ -78,7 +78,7 @@ See [examples/office-hours.html](examples/office-hours.html) — a 1717-line bra
 
 ```bash
 # 安装
-curl -fsSL https://raw.githubusercontent.com/roxor/s2h/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/roxorlt/s2h/main/install.sh | bash
 
 # 在 Claude Code 里运行
 /s2h ~/.claude/skills/some-skill/SKILL.md
