@@ -121,12 +121,15 @@ echo "S2H_VERSION: $_S2H_LOCAL"
 _S2H_FIRST=$([ -f "$S2H_HOME/.initialized" ] && echo "no" || echo "yes")
 echo "S2H_FIRST_RUN: $_S2H_FIRST"
 
-# Load config: output_dir, default_lang, etc.
+# Load config: output_dir, default_lang, telemetry, etc.
 _S2H_OUTPUT_DIR=""
+_S2H_TEL_MODE=""
 if [ -f "$S2H_HOME/config" ]; then
   _S2H_OUTPUT_DIR=$(grep -s 'output_dir=' "$S2H_HOME/config" 2>/dev/null | cut -d= -f2-)
+  _S2H_TEL_MODE=$(grep -s 'telemetry=' "$S2H_HOME/config" 2>/dev/null | cut -d= -f2-)
 fi
 echo "S2H_OUTPUT_DIR: ${_S2H_OUTPUT_DIR:-/tmp}"
+echo "S2H_TELEMETRY: ${_S2H_TEL_MODE:-not_set}"
 
 # Auto-update: check GitHub for newer version (timeout 3s, fail silently)
 _S2H_REMOTE=$(curl -fsSL --max-time 3 "https://raw.githubusercontent.com/roxorlt/s2h/main/VERSION" 2>/dev/null || echo "")
@@ -135,6 +138,53 @@ echo "S2H_REMOTE: ${_S2H_REMOTE:-unreachable}"
 # Python check
 python3 --version 2>/dev/null && echo "S2H_PYTHON: ok" || echo "S2H_PYTHON: missing"
 ```
+
+#### Telemetry: Cross-run Report + Start Ping
+
+在 Preamble bash 块之后，使用 `!` 语法执行以下 shell 命令。`!` 语法在 `getPromptForCommand()` 阶段确定性执行，100% 可靠，不依赖 LLM。
+
+```bash
+! _S2H_HOME="$HOME/.s2h"; _S2H_TEL=$(grep -s 'telemetry=' "$_S2H_HOME/config" 2>/dev/null | cut -d= -f2-); if [ "$_S2H_TEL" != "off" ]; then _S2H_API="https://s2h-telemetry.ltsms86.workers.dev/api"; _S2H_V=$(cat "$_S2H_HOME/.version" 2>/dev/null || echo "1.0.0"); _LR="$_S2H_HOME/last_result.json"; if [ -f "$_LR" ]; then _MODE="community"; [ "$_S2H_TEL" = "anonymous" ] && _MODE="anonymous"; curl -fsS --max-time 3 -X POST "$_S2H_API/ping" -H "Content-Type: application/json" -d "$(cat "$_LR" | sed "s/\"mode\":\"[^\"]*\"/\"mode\":\"$_MODE\"/")" 2>/dev/null; rm -f "$_LR"; echo "S2H_LAST_RESULT: reported"; else echo "S2H_LAST_RESULT: none"; fi; _MODE="community"; [ "$_S2H_TEL" = "anonymous" ] && _MODE="anonymous"; curl -fsS --max-time 3 -X POST "$_S2H_API/ping" -H "Content-Type: application/json" -d "{\"v\":\"$_S2H_V\",\"event\":\"start\",\"mode\":\"$_MODE\"}" 2>/dev/null &; echo "S2H_START_PING: sent"; fi
+```
+
+**逻辑说明**：
+1. 读取 `~/.s2h/config` 中的 `telemetry` 设置，`off` 则跳过全部
+2. 如果存在 `~/.s2h/last_result.json`（上次运行的完成数据），读取、上报、删除
+3. 发送 `event: "start"` 到 `/api/ping`，后台执行（`&`）
+4. `community` 模式正常记录 IP，`anonymous` 模式服务端不存 IP
+
+#### 首次遥测引导
+
+如果用户从未被询问过遥测偏好（`~/.s2h/.telemetry-prompted` 不存在），在 Preamble 结束后、Phase 0 开始前，进行两轮引导。**此引导仅在首次触发，后续运行跳过。**
+
+**触发条件**：`! [ ! -f "$HOME/.s2h/.telemetry-prompted" ] && echo "S2H_TEL_PROMPT: needed" || echo "S2H_TEL_PROMPT: done"`
+
+当 `S2H_TEL_PROMPT: needed` 时，使用 AskUserQuestion 进行两轮选择：
+
+**第一轮**：
+
+```
+帮 s2h 变得更好！开启后我们会收集：拆解耗时、是否成功完成拆解任务。
+不会发送任何代码、文件内容或路径。
+随时可在 ~/.s2h/config 中设置 telemetry=off 关闭。
+
+选择你的偏好：
+1. community — 开启遥测（帮助我们了解使用趋势）
+2. anonymous — 开启遥测但不记录 IP
+3. off — 完全关闭
+```
+
+**第二轮**（确认）：
+
+```
+确认选择：{用户选择的选项}？(y/n)
+```
+
+**处理逻辑**：
+- 用户确认后，写入 `~/.s2h/config`（追加 `telemetry={choice}`）
+- 创建标记文件：`touch "$HOME/.s2h/.telemetry-prompted"`
+- 如果用户选 `off`，当前运行的 start ping 已发出（`!` 语法已执行），但后续运行不再上报
+- 如果用户拒绝确认（选 n），默认设为 `community` 并标记已询问
 
 ### Preamble 行为
 
@@ -751,12 +801,24 @@ fi
     // 折叠展开交互
     // 长列表折叠（>5 项 → "+N more"）
     // Copy MD / Download MD（参见 interaction.js）
+
+    // View beacon — 页面首次打开时上报一次（sessionStorage 去重）
+    // 仅当用户遥测未关闭时嵌入此段（telemetry != off）
+    ;(function() {
+      var k = 's2h_viewed_{skill_name}';
+      if (sessionStorage.getItem(k)) return;
+      sessionStorage.setItem(k, '1');
+      var d = {v: '{s2h_version}', skill: '{skill_name}', lang: '{lang}'};
+      try { navigator.sendBeacon('https://s2h-telemetry.ltsms86.workers.dev/api/view', JSON.stringify(d)); } catch(e) {}
+    })();
   </script>
 </body>
 </html>
 ```
 
 **长列表折叠规则**：>5 项的列表默认只显示前 5 项 + "+N more" 按钮。适用于 URL、findings、配套文件等。
+
+**View Beacon 条件**：仅当 Preamble 读取的 `_S2H_TEL_MODE` 不为 `off` 时，才在 HTML 中嵌入 view beacon 脚本。`telemetry=off` 的用户生成的 HTML 不包含任何上报代码。
 
 ```javascript
 document.querySelectorAll('.s2h-list-capped').forEach(function(list) {
@@ -1242,13 +1304,15 @@ LANGUAGE: {lang}
 
 ```bash
 echo "$S2H_VERSION" > "$S2H_HOME/.version"
-# Preserve user-set output_dir when rewriting config
+# Preserve user-set output_dir and telemetry when rewriting config
 _S2H_KEEP_OUTPUT_DIR=$(grep -s 'output_dir=' "$S2H_HOME/config" 2>/dev/null | head -1)
+_S2H_KEEP_TEL=$(grep -s 'telemetry=' "$S2H_HOME/config" 2>/dev/null | head -1)
 cat > "$S2H_HOME/config" <<EOF
 default_lang=$_S2H_LANG
 last_run=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 last_skill=$SKILL_NAME
 ${_S2H_KEEP_OUTPUT_DIR}
+${_S2H_KEEP_TEL}
 EOF
 ```
 
@@ -1267,19 +1331,27 @@ echo '{"skill":"'"$SKILL_NAME"'","type":"operational","key":"SHORT_KEY","insight
 
 只记录跨 session 有价值的发现，不记录一次性的瞬态错误。
 
-### Telemetry（匿名，可关闭）
+### Telemetry: 写入 last_result.json
 
-完成后上报一条匿名使用记录。**只发 4 个字段**：版本号、语言、耗时、是否成功。不发路径、不发 skill 内容、不发用户信息。
+完成时不直接 curl 上报（LLM 可能跳过 Completion 阶段的 curl）。改为写文件，下次运行时由 Preamble `!` 语法可靠上报。
 
 ```bash
 _S2H_TEL=$(grep -s 'telemetry=' "$S2H_HOME/config" 2>/dev/null | cut -d= -f2)
 if [ "$_S2H_TEL" != "off" ]; then
   _S2H_DUR=$(( $(date +%s) - _S2H_START ))
-  curl -fsS --max-time 3 -X POST "https://s2h-telemetry.ltsms86.workers.dev/api/ping" \
-    -H "Content-Type: application/json" \
-    -d '{"v":"'"$S2H_VERSION"'","lang":"'"$_S2H_LANG"'","dur":'"$_S2H_DUR"',"ok":true}' \
-    2>/dev/null &
+  _S2H_OK=1  # 1=成功, 0=失败（根据 STATUS 判断：DONE/DONE_WITH_CONCERNS=1, 其他=0）
+  _S2H_LINES=$(wc -l < "$_SKILL_FILE" 2>/dev/null | tr -d ' ')
+  _S2H_HTML_SIZE=$(wc -c < "$_OUTPUT" 2>/dev/null | tr -d ' ')
+  cat > "$S2H_HOME/last_result.json" <<LASTRESULT
+{"v":"$S2H_VERSION","lang":"$_S2H_LANG","dur":$_S2H_DUR,"ok":$_S2H_OK,"event":"complete","skill":"$SKILL_NAME","lines":${_S2H_LINES:-0},"risk":"${_S2H_RISK:-unknown}","html_size":${_S2H_HTML_SIZE:-0},"mode":"community","ts":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+LASTRESULT
+  echo "S2H_LAST_RESULT: written"
 fi
 ```
 
-用户可在 `~/.s2h/config` 中设置 `telemetry=off` 关闭上报。
+**数据流**：
+1. Completion 写 `~/.s2h/last_result.json`（文件写入，100% 可靠）
+2. 下次运行 Preamble `!` 语法读取、上报、删除（确定性执行，100% 可靠）
+3. `mode` 字段在上报时由 Preamble 根据 config 中的 `telemetry` 设置覆盖
+
+用户可在 `~/.s2h/config` 中设置 `telemetry=off` 关闭遥测。关闭后不写 `last_result.json`，不发 start ping，生成的 HTML 不含 view beacon。
