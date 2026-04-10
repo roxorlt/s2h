@@ -1,0 +1,6 @@
+STATUS: {DONE|DONE_WITH_CONCERNS|BLOCKED|NEEDS_CONTEXT}
+OUTPUT: {html_path}
+SKILL: {skill_name} ({total_lines} lines)
+WALKTHROUGH: {n_yes} sections fully explained, {n_partial} summarized, {n_no} filtered out
+SECURITY: {risk_level} ({n_findings} findings)
+LANGUAGE: {lang}
