@@ -6,7 +6,9 @@
 
 # s2h — Skill to HTML
 
-Decompose any [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill into an interactive HTML explainer page. Give s2h a SKILL.md file (local path, GitHub URL, or skills.sh link), and it produces a single-file HTML page that breaks down the skill's workflow, architecture, and security profile — readable by anyone, no prior context needed.
+Breaks down how any skill works and presents it as an HTML page — so you can understand every detail before you install it, security scan included.
+
+Give it a skill (local path, GitHub URL, or skills.sh link) and s2h generates a thorough report covering the skill's workflow, architecture, and security profile. No prior context needed.
 
 &nbsp;
 
@@ -94,7 +96,9 @@ options:
 
 # s2h — 把 Skill 拆成网页
 
-把任意 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill 拆解为一张交互式 HTML 页面，看完就懂这个 skill 怎么运转。丢一个 SKILL.md 进来（本地路径、GitHub 链接、skills.sh 地址都行），s2h 帮你生成一份独立的 HTML，把 skill 的工作流、架构和安全状况讲清楚，不需要任何前置知识就能看懂。
+把任意 Skill 的运转机制拆解，以 HTML 页面形式直观呈现，在安装 Skill 之前就能掌握它的每个细节，顺带完成安全性扫描。
+
+丢一个 Skill 进来（本地路径、GitHub 链接、skills.sh 地址都行），s2h 帮你生成一份详尽报告，把 Skill 的工作流、架构和安全状况讲清楚，不需要任何前置知识就能看懂。
 
 &nbsp;
 
