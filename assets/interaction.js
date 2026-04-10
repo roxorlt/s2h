@@ -78,6 +78,63 @@
     });
   });
 
+  // === Copy Markdown ===
+  var copyBtn = document.querySelector('.s2h-btn-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      var mdEl = document.getElementById('s2h-markdown');
+      if (!mdEl) return;
+      var md = mdEl.textContent;
+      // Safari-safe: writeText must be in user gesture call stack
+      navigator.clipboard.writeText(md).then(function () {
+        showToast(copyBtn.dataset.toast || 'Copied!');
+      }).catch(function () {
+        // Fallback for older browsers
+        var ta = document.createElement('textarea');
+        ta.value = md;
+        ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(copyBtn.dataset.toast || 'Copied!');
+      });
+    });
+  }
+
+  // === Download Markdown ===
+  var dlBtn = document.querySelector('.s2h-btn-download');
+  if (dlBtn) {
+    dlBtn.addEventListener('click', function () {
+      var mdEl = document.getElementById('s2h-markdown');
+      if (!mdEl) return;
+      var md = mdEl.textContent;
+      var blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = dlBtn.dataset.filename || 's2h-export.md';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  }
+
+  // === Toast notification ===
+  function showToast(msg) {
+    var existing = document.querySelector('.s2h-toast');
+    if (existing) existing.remove();
+    var toast = document.createElement('div');
+    toast.className = 's2h-toast';
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    // Force reflow then show
+    toast.offsetHeight;
+    toast.classList.add('show');
+    setTimeout(function () {
+      toast.classList.remove('show');
+      setTimeout(function () { toast.remove(); }, 200);
+    }, 1600);
+  }
+
   // === Analytics beacon (opt-in, no-op if endpoint missing) ===
   var beacon = document.querySelector('meta[name="s2h-beacon"]');
   if (beacon && beacon.content && typeof navigator.sendBeacon === 'function') {

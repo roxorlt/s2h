@@ -207,10 +207,11 @@ code, pre{
 
 /* === Layer nav tabs === */
 /* Anchor navigation (sticky, replaces old tab system) */
-.s2h-nav{position:sticky;top:0;z-index:100;display:flex;gap:0;background:var(--bg-0);border-bottom:1px solid var(--border-2);padding:0 24px}
-.s2h-nav a{padding:12px 20px;font-size:13px;font-weight:550;color:var(--text-3);text-decoration:none;border-bottom:2px solid transparent;transition:color .15s, border-color .15s}
-.s2h-nav a:hover{color:var(--text-0)}
-.s2h-nav a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.s2h-nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:stretch;background:var(--bg-0);border-bottom:1px solid var(--border-2);padding:0 0 0 24px}
+.s2h-nav-links{display:flex;gap:0}
+.s2h-nav-links a{display:flex;align-items:center;padding:12px 20px;font-size:13px;font-weight:550;color:var(--text-3);text-decoration:none;border-bottom:2px solid transparent;transition:color .15s, border-color .15s}
+.s2h-nav-links a:hover{color:var(--text-0)}
+.s2h-nav-links a.active{color:var(--accent);border-bottom-color:var(--accent)}
 
 /* Long list collapse */
 .s2h-list-capped li:nth-child(n+6){display:none}
@@ -313,6 +314,14 @@ code, pre{
 /* === Dynamic slot === */
 .s2h-dynamic{margin:24px 0;min-height:0;transition:min-height .3s}
 .s2h-dynamic:empty{display:none}
+
+/* === Copy/Download MD buttons (nav right-side actions) === */
+.s2h-nav-actions{display:flex;gap:6px;align-items:center;padding-right:8px}
+.s2h-btn-md{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;font-size:12px;font-weight:550;color:var(--text-2);background:var(--bg-2);border:1px solid var(--border-2);border-radius:var(--radius-xs);cursor:pointer;transition:background .15s, color .15s, border-color .15s;white-space:nowrap;line-height:1}
+.s2h-btn-md:hover{background:var(--bg-3);color:var(--text-0);border-color:var(--border-3)}
+.s2h-btn-md svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.s2h-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-40px);background:var(--text-0);color:var(--bg-1);padding:8px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:550;opacity:0;transition:opacity .2s, transform .2s;pointer-events:none;z-index:9999}
+.s2h-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* === Footer === */
 .s2h-footer{padding:32px 0;text-align:center;color:var(--text-3);font-size:12px;border-top:1px solid var(--border-2)}

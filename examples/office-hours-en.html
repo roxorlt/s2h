@@ -68,10 +68,17 @@ code,pre{font-family:var(--ff-mono);font-size:14px}
 .s2h-card.safe{border-left:3px solid var(--green)}
 .s2h-card.info{border-left:3px solid var(--accent)}
 .s2h-card.warn{border-left:3px solid var(--orange)}
-.s2h-nav{position:sticky;top:0;z-index:100;display:flex;gap:0;background:var(--bg-0);border-bottom:1px solid var(--border-2);padding:0 24px}
-.s2h-nav a{padding:12px 20px;font-size:13px;font-weight:550;color:var(--text-3);text-decoration:none;border-bottom:2px solid transparent;transition:color .15s, border-color .15s}
-.s2h-nav a:hover{color:var(--text-0)}
-.s2h-nav a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.s2h-nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:stretch;background:var(--bg-0);border-bottom:1px solid var(--border-2);padding:0 0 0 24px}
+.s2h-nav-links a{display:flex;align-items:center;padding:12px 20px;font-size:13px;font-weight:550;color:var(--text-3);text-decoration:none;border-bottom:2px solid transparent;transition:color .15s, border-color .15s}
+.s2h-nav-links a:hover{color:var(--text-0)}
+.s2h-nav-links a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.s2h-nav-links{display:flex;gap:0}
+.s2h-nav-actions{display:flex;gap:6px;align-items:center;padding-right:8px}
+.s2h-btn-md{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;font-size:12px;font-weight:550;color:var(--text-2);background:var(--bg-2);border:1px solid var(--border-2);border-radius:var(--radius-xs);cursor:pointer;transition:background .15s,color .15s,border-color .15s;white-space:nowrap;line-height:1}
+.s2h-btn-md:hover{background:var(--bg-3);color:var(--text-0);border-color:var(--border-3)}
+.s2h-btn-md svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.s2h-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-40px);background:var(--text-0);color:var(--bg-1);padding:8px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:550;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999}
+.s2h-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .s2h-author{color:inherit;text-decoration:none;border-bottom:1px solid var(--border-1)}
 .s2h-author:hover{border-bottom-color:var(--text-3)}
 .s2h-author span{display:inline-block}
@@ -127,10 +134,22 @@ code,pre{font-family:var(--ff-mono);font-size:14px}
 <body>
 
 <nav class="s2h-nav">
-  <a href="#overview" class="active">Overview</a>
-  <a href="#walkthrough">Walkthrough</a>
-  <a href="#trust">Security Scan</a>
-  <a href="#context">Context</a>
+  <div class="s2h-nav-links">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#walkthrough">Walkthrough</a>
+    <a href="#trust">Security Scan</a>
+    <a href="#context">Context</a>
+  </div>
+  <div class="s2h-nav-actions">
+    <button class="s2h-btn-md s2h-btn-copy" data-toast="Copied to clipboard!" title="Copy page as Markdown for AI">
+      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy Page
+    </button>
+    <button class="s2h-btn-md s2h-btn-download" data-filename="office-hours-s2h.md">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download MD
+    </button>
+  </div>
 </nav>
 
 <div class="s2h-wrap">
@@ -509,6 +528,211 @@ flowchart TB
   <a href="https://github.com/roxorlt" class="s2h-author"><span style="--i:0">r</span><span style="--i:1">o</span><span style="--i:2">x</span><span style="--i:3">o</span><span style="--i:4">r</span></a> · 2026
 </footer>
 
+<script id="s2h-markdown" type="text/plain">
+# office-hours — s2h Skill Explainer
+
+> Simulates a YC partner one-on-one: high-pressure questions to sharpen your product direction, ending with a design document
+
+**1825 lines | 6+ phases | 2 branch paths | 42 code blocks | 38 external URLs | 8 tool permissions**
+
+---
+
+## Overview
+
+Two modes, one core pipeline. Depending on whether you're building a startup or a personal project, the skill takes a different questioning path but converges into the same design document.
+
+```mermaid
+flowchart TB
+  P1["Phase 1 Context Gathering"]
+  MODE{"Startup or Personal?"}
+  P2A["Phase 2A Startup Diagnosis 6 forcing questions"]
+  P2B["Phase 2B Builder Co-creation 5 divergent questions"]
+  P25["Phase 2.5 Prior Design Search"]
+  P275["Phase 2.75 Industry Research"]
+  P3["Phase 3 Assumption Challenge"]
+  P35["Phase 3.5 Cross-Model Second Opinion"]
+  P4["Phase 4 Solution Generation"]
+  P45["Phase 4.5 Founder Signal Assessment"]
+  P5["Phase 5 Design Document"]
+  SR["Spec Review Loop Adversarial Review"]
+  P6["Phase 6 Closing + Recommendations"]
+  P1 --> MODE
+  MODE -->|"Startup / Intrapreneurship"| P2A
+  MODE -->|"Hackathon / OSS / Learning / Fun"| P2B
+  P2A --> P25
+  P2B --> P25
+  P25 --> P275
+  P275 --> P3
+  P3 --> P35
+  P35 --> P4
+  P4 --> P45
+  P45 --> P5
+  P5 --> SR
+  SR --> P6
+```
+
+**Two modes:**
+- **Startup Mode** — Simulates a YC partner's high-pressure diagnosis with 6 "forcing questions" to expose whether the need is real and define the narrowest wedge
+- **Builder Mode** — Acts as your co-pilot, not your judge. Uses divergent questions to find the coolest version of your project
+
+**Hard constraints:** Only produces design documents. Never writes code, never scaffolds, never implements. Asks one question at a time and waits for your answer.
+
+---
+
+## Walkthrough
+
+> gstack framework initialization: version check, telemetry setup, config loading, session management, learnings retrieval — about 600 lines of shared framework code. Source: line 29-598
+
+### Phase 1: Context Gathering (Both modes)
+
+Understands your project before asking anything. Reads CLAUDE.md and TODOS.md for project context, checks git log for recent activity, uses Grep/Glob to map the codebase. If you've done office-hours before, surfaces prior design docs. Then asks the key question: what's your goal? The answer determines Startup or Builder mode.
+
+**Input:** Project codebase + user-stated goal
+**Output:** Project understanding summary + mode selection (Startup / Builder)
+
+> Prior Learnings: Loads experience accumulated from past sessions in `~/.gstack/`, reuses relevant insights. Source: line 626-655
+
+### Phase 2A: Startup Diagnosis — 6 Forcing Questions (Startup)
+
+Simulates a YC partner interview. Fires 6 "forcing questions" one by one, pushing until you provide concrete evidence. Not to be difficult — to catch directional mistakes before you write code.
+
+| # | Question | Push until you hear |
+|---|----------|-------------------|
+| Q1 | **Demand validation** — What evidence do you have that people actually want this? | Specific behavior: paying, expanding usage, can't live without it |
+| Q2 | **Current alternative** — How do users solve this today? | Specific workflow: hours spent, money wasted, tools used |
+| Q3 | **Extreme specificity** — What's the name of the person who needs this most? | Name, title, KPI, source of pain |
+| Q4 | **Narrowest wedge** — What's the smallest version you could charge for this week? | One feature, one flow, buildable in days |
+| Q5 | **Observation & surprise** — Have you watched someone use your product? What surprised you? | One specific surprise: user did something unintended |
+| Q6 | **Future fitness** — In 3 years, does a changed world make your product more or less relevant? | One specific trend and its causal link |
+
+**Smart routing:** Doesn't ask all 6 at every stage. Idea stage: Q1/Q2/Q3. Has users: Q2/Q4/Q5. Has revenue: Q4/Q5/Q6.
+**Exit mechanism:** If the user gets impatient, asks at most 2 more critical questions then moves on.
+
+### Phase 2B: Builder Co-creation (Builder)
+
+Completely different vibe from Startup mode. No judgment, pure co-pilot. Uses 5 divergent questions to explore the most interesting possibilities: what's the coolest version? Who would you show it to? What's the fastest thing you can ship?
+
+**Input:** User's project idea
+**Output:** Refined project direction + clear definition of "what makes it cool"
+
+If the user mentions customers, revenue, or fundraising mid-conversation, automatically escalates to Startup mode.
+
+### Phase 2.5: Prior Design Search (Both modes)
+
+Searches `~/.gstack/projects/` for historical design documents with overlapping keywords. If you've done a related office-hours session before, surfaces it and asks if you want to build on it.
+
+**Input:** Current problem keywords
+**Output:** Related prior designs (if any)
+
+### Phase 2.75: Industry Research (Both modes)
+
+Searches the external world's take on your domain, but only uses generic category terms — never reveals your specific idea. Digests results in three layers: common knowledge, current discourse, and whether anything contradicts conventional wisdom given your conversation. If so, marks it as EUREKA.
+
+**Input:** Problem domain (generalized terms)
+**Output:** Three-layer analysis + potential EUREKA insights
+
+Asks permission before searching. User can decline and continue with model knowledge only.
+
+### Phase 3: Assumption Challenge (Both modes)
+
+Before proposing solutions, challenges the problem itself. Maybe the problem is wrong, maybe doing nothing is optimal, maybe existing code already solves half of it. Lists 3-5 premises for you to confirm one by one. Any rejection means going back to revise direction.
+
+**Input:** Phase 2 diagnosis conclusions
+**Output:** Confirmed list of premises
+
+### Phase 3.5: Cross-Model Second Opinion (Both modes, optional)
+
+Packages the conversation's key information into a structured summary and hands it to an independent AI that hasn't seen the conversation. It identifies the strongest product direction, the most critical user answers, and which premise might be wrong. Two AIs that don't know each other's thinking — cross-validation is more reliable.
+
+**Input:** Structured summary of Phases 1-3
+**Output:** Independent cold-read report + Claude cross-comparison analysis
+
+Prefers Codex (OpenAI); falls back to Claude subagent if unavailable. User can skip.
+
+### Phase 4: Solution Generation (Both modes)
+
+Forces 2-3 different implementation directions. One "minimum viable" (fastest to ship), one "ideal architecture" (long-term best), optionally one "lateral approach" (redefines the problem). Each annotated with effort, risk, and which existing code it reuses.
+
+**Input:** Confirmed premises + second opinion
+**Output:** 2-3 solution comparison + recommended choice
+
+> Visual Design Exploration: If the chosen solution involves UI, can use design binary to generate 3 style-variant mockups via comparison board. Source: line 1101-1264
+
+> Phase 4.5 Founder Signal Assessment: Reviews the entire conversation for "founder traits" (e.g., can name their user, challenges premises proactively, describes a revenue path). Signal strength determines recommendation intensity at closing. Source: line 1265-1280
+
+### Phase 5: Design Document (Both modes)
+
+Condenses all discussion into a structured markdown design document, saved to `~/.gstack/projects/{slug}/`. Startup and Builder modes have different templates, but both include problem statement, premises, solution comparison, recommended solution, and success criteria. Ends with "I noticed how you think" — quoting the user's own words as feedback.
+
+**Input:** All phase outputs
+**Output:** `~/.gstack/projects/{slug}/{user}-{branch}-design-{datetime}.md`
+
+### Spec Review Loop: Adversarial Review (Both modes)
+
+After writing the design doc, dispatches an independent AI reviewer to find holes. It hasn't seen the conversation — only the document itself. Scores on completeness, consistency, clarity, scope, and feasibility. Fixes issues, re-reviews, up to 3 rounds.
+
+**Input:** Draft design document
+**Output:** Review-approved document + quality score
+
+### Phase 6: Closing — Founder Discovery (Both modes)
+
+After user approves the design doc, closes in three parts. First: quotes the conversation to reflect on thinking patterns. Second: switches to "Garry Tan personal note" mode, recommending YC based on founder signal strength. Third: shares 2-3 resources matching the situation (YC videos, Paul Graham essays, etc.) from a pool of 34 — auto-deduped so returning users never see repeats.
+
+**Input:** Approved design doc + founder signal assessment
+**Output:** Personalized closing + resource recommendations + next-skill suggestions
+
+> Capture Learnings: Before session ends, logs valuable discoveries to `learnings.jsonl` for automatic reuse in future sessions. Source: line 1682-1705
+
+---
+
+## Security Scan
+
+**Risk Level: Medium**
+
+| # | Category | Description | Risk |
+|---|----------|-------------|------|
+| 1 | Network Access | Phase 2.75 searches industry info via WebSearch. Consent: AskUserQuestion, user can decline | Low |
+| 2 | Cross-Model Call | Phase 3.5 calls Codex or Claude subagent for second opinion. Consent: AskUserQuestion, sends structured summary not raw conversation | Medium |
+| 3 | File Writes | Writes to `~/.gstack/` directory (design docs, analytics, learnings, config, etc.). 58 file operations, all confined to user config directory | Low |
+| 4 | Binary Execution | Invokes gstack ecosystem binaries (gstack-config, gstack-telemetry-log, gstack-learnings-search, etc.) | Low |
+| 5 | Telemetry | Local JSONL always written to `~/.gstack/analytics/`. Remote reporting only after user opts into community/anonymous mode. Fully disableable | Low |
+| 6 | URL Opening | Phase 6 may call `open` for ycombinator.com and resource links. Consent: AskUserQuestion | Low |
+
+**Summary:** All network operations (search, cross-model calls, opening links) have explicit user consent gates and can be individually declined. File operations are confined to `~/.gstack/` user directory. Telemetry has three levels (community/anonymous/off). No toxic flows, no prompt injection. Rated medium due to passing user discussion summaries to external AI.
+
+---
+
+## Context
+
+### Ecosystem
+office-hours is part of the gstack skill suite. gstack provides a shared preamble (~600 lines handling version checks, telemetry, config, session management, and the learnings system) used by all gstack skills.
+
+### Downstream Skills
+- `/plan-ceo-review` — Strategic scope review (for ambitious plans)
+- `/plan-eng-review` — Architecture and test review (lock down implementation)
+- `/plan-design-review` — Visual and interaction review
+
+### External Tool Dependencies
+- `codex` — OpenAI Codex CLI for Phase 3.5 cross-model second opinion (optional, falls back to Claude subagent)
+- `design binary` — gstack's design generation tool for visual mockup exploration (optional, falls back to HTML wireframe)
+- `gstack-*` suite — config, telemetry, learnings, timeline, and other gstack infrastructure
+
+### Resource Pool (34 external links)
+Phase 6 selects 2-3 situation-matched recommendations from this pool. Auto-deduped so returning users never see repeats.
+
+- **Garry Tan Videos** — 5 (incl. "$200M Startup Mistakes", "The New Way To Build A Startup")
+- **YC Backstory / How to Build the Future** — 2 (Tom Blomfield, DoorDash CEO)
+- **Lightcone Podcast** — 9 (incl. "Vertical AI Agents 10X Bigger Than SaaS", "Vibe Coding Is The Future")
+- **YC Startup School** — 8 (incl. "How to Get Startup Ideas", "How To Talk To Users")
+- **Paul Graham Essays** — 10 (incl. "How to Do Great Work", "Bus Ticket Theory")
+
+### Companion Files
+Single SKILL.md (1825 lines), auto-generated from SKILL.md.tmpl (gstack's preamble injection mechanism). No separate bin/ or assets/ directory.
+
+---
+
+*Generated by [s2h](https://github.com/roxorlt/s2h) v1.0.0*
+</script>
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 mermaid.initialize({startOnLoad:true,theme:'neutral',flowchart:{curve:'basis',nodeSpacing:30,rankSpacing:40}});
@@ -516,7 +740,7 @@ mermaid.initialize({startOnLoad:true,theme:'neutral',flowchart:{curve:'basis',no
 <script>
 // Anchor nav active state
 (function(){
-  var links=document.querySelectorAll('.s2h-nav a');
+  var links=document.querySelectorAll('.s2h-nav-links a');
   var sections=document.querySelectorAll('section[id]');
   function update(){
     var y=window.scrollY+80;
@@ -539,6 +763,37 @@ document.querySelectorAll('.s2h-list-capped').forEach(function(list){
   btn.onclick=function(){list.classList.add('expanded');btn.style.display='none'};
   list.after(btn);
 });
+// Copy MD
+var copyBtn=document.querySelector('.s2h-btn-copy');
+if(copyBtn){copyBtn.addEventListener('click',function(){
+  var md=document.getElementById('s2h-markdown');
+  if(!md)return;
+  navigator.clipboard.writeText(md.textContent).then(function(){
+    showToast(copyBtn.dataset.toast||'Copied!');
+  }).catch(function(){
+    var ta=document.createElement('textarea');ta.value=md.textContent;
+    ta.style.cssText='position:fixed;left:-9999px';document.body.appendChild(ta);
+    ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    showToast(copyBtn.dataset.toast||'Copied!');
+  });
+})}
+// Download MD
+var dlBtn=document.querySelector('.s2h-btn-download');
+if(dlBtn){dlBtn.addEventListener('click',function(){
+  var md=document.getElementById('s2h-markdown');
+  if(!md)return;
+  var blob=new Blob([md.textContent],{type:'text/markdown;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=dlBtn.dataset.filename||'s2h-export.md';a.click();
+  URL.revokeObjectURL(a.href);
+})}
+// Toast
+function showToast(msg){
+  var t=document.querySelector('.s2h-toast');if(t)t.remove();
+  t=document.createElement('div');t.className='s2h-toast';t.textContent=msg;
+  document.body.appendChild(t);t.offsetHeight;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},200)},1600);
+}
 </script>
 </body>
 </html>

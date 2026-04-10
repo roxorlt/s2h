@@ -68,10 +68,17 @@ code,pre{font-family:var(--ff-mono);font-size:14px}
 .s2h-card.safe{border-left:3px solid var(--green)}
 .s2h-card.info{border-left:3px solid var(--accent)}
 .s2h-card.warn{border-left:3px solid var(--orange)}
-.s2h-nav{position:sticky;top:0;z-index:100;display:flex;gap:0;background:var(--bg-0);border-bottom:1px solid var(--border-2);padding:0 24px}
-.s2h-nav a{padding:12px 20px;font-size:13px;font-weight:550;color:var(--text-3);text-decoration:none;border-bottom:2px solid transparent;transition:color .15s, border-color .15s}
-.s2h-nav a:hover{color:var(--text-0)}
-.s2h-nav a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.s2h-nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:stretch;background:var(--bg-0);border-bottom:1px solid var(--border-2);padding:0 0 0 24px}
+.s2h-nav-links a{display:flex;align-items:center;padding:12px 20px;font-size:13px;font-weight:550;color:var(--text-3);text-decoration:none;border-bottom:2px solid transparent;transition:color .15s, border-color .15s}
+.s2h-nav-links a:hover{color:var(--text-0)}
+.s2h-nav-links a.active{color:var(--accent);border-bottom-color:var(--accent)}
+.s2h-nav-links{display:flex;gap:0}
+.s2h-nav-actions{display:flex;gap:6px;align-items:center;padding-right:8px}
+.s2h-btn-md{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;font-size:12px;font-weight:550;color:var(--text-2);background:var(--bg-2);border:1px solid var(--border-2);border-radius:var(--radius-xs);cursor:pointer;transition:background .15s,color .15s,border-color .15s;white-space:nowrap;line-height:1}
+.s2h-btn-md:hover{background:var(--bg-3);color:var(--text-0);border-color:var(--border-3)}
+.s2h-btn-md svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.s2h-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-40px);background:var(--text-0);color:var(--bg-1);padding:8px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:550;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999}
+.s2h-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .s2h-author{color:inherit;text-decoration:none;border-bottom:1px solid var(--border-1)}
 .s2h-author:hover{border-bottom-color:var(--text-3)}
 .s2h-author span{display:inline-block}
@@ -127,10 +134,22 @@ code,pre{font-family:var(--ff-mono);font-size:14px}
 <body>
 
 <nav class="s2h-nav">
-  <a href="#overview" class="active">概览</a>
-  <a href="#walkthrough">逐步拆解</a>
-  <a href="#trust">安全扫描</a>
-  <a href="#context">相关信息</a>
+  <div class="s2h-nav-links">
+    <a href="#overview" class="active">概览</a>
+    <a href="#walkthrough">逐步拆解</a>
+    <a href="#trust">安全扫描</a>
+    <a href="#context">相关信息</a>
+  </div>
+  <div class="s2h-nav-actions">
+    <button class="s2h-btn-md s2h-btn-copy" data-toast="已复制到剪贴板" title="将页面复制为 Markdown 文本，以提供给 AI">
+      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      复制页面
+    </button>
+    <button class="s2h-btn-md s2h-btn-download" data-filename="office-hours-s2h.md">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      下载 MD
+    </button>
+  </div>
 </nav>
 
 <div class="s2h-wrap">
@@ -509,6 +528,212 @@ flowchart TB
   <a href="https://github.com/roxorlt" class="s2h-author"><span style="--i:0">r</span><span style="--i:1">o</span><span style="--i:2">x</span><span style="--i:3">o</span><span style="--i:4">r</span></a> · 2026
 </footer>
 
+<script id="s2h-markdown" type="text/plain">
+# office-hours — s2h Skill Explainer
+
+> 模拟 YC 合伙人一对一诊断，用高压提问帮你想清楚产品方向，最终产出设计文档
+
+**1825 行 | 6+ 阶段 | 2 分支路径 | 42 代码块 | 38 外部链接 | 8 工具权限**
+
+---
+
+## 概览
+
+两种模式、一套核心流程。根据你是创业还是做个人项目，走不同的提问路线，最终收敛为同一份设计文档。
+
+```mermaid
+flowchart TB
+  P1["Phase 1 收集相关信息"]
+  MODE{"创业 or 个人项目?"}
+  P2A["Phase 2A 创业诊断 6个高压问题"]
+  P2B["Phase 2B Builder共创 5个发散问题"]
+  P25["Phase 2.5 历史设计检索"]
+  P275["Phase 2.75 行业认知搜索"]
+  P3["Phase 3 前提假设挑战"]
+  P35["Phase 3.5 跨模型第二意见"]
+  P4["Phase 4 方案生成"]
+  P45["Phase 4.5 创始人信号评估"]
+  P5["Phase 5 设计文档"]
+  SR["Spec Review Loop 对抗式审查"]
+  P6["Phase 6 收尾+推荐"]
+  P1 --> MODE
+  MODE -->|"创业/内部创业"| P2A
+  MODE -->|"Hackathon/开源/学习/娱乐"| P2B
+  P2A --> P25
+  P2B --> P25
+  P25 --> P275
+  P275 --> P3
+  P3 --> P35
+  P35 --> P4
+  P4 --> P45
+  P45 --> P5
+  P5 --> SR
+  SR --> P6
+```
+
+**两种模式：**
+- **Startup Mode（创业）** — 模拟 YC 合伙人的高压诊断，用 6 个"逼问"揭露需求真伪、定义最小切入点
+- **Builder Mode** — 当你的搭档而非审判者，用发散式提问帮你找到项目最酷的版本
+
+**硬性约束：** 只产出设计文档，绝对不写代码、不搭脚手架、不做任何实现。每次只问一个问题，等用户回答后再继续。
+
+---
+
+## 逐步拆解
+
+> gstack 框架初始化：版本检查、telemetry 设置、config 加载、会话管理、learnings 检索等约 600 行通用框架代码。Source: line 29-598
+
+### Phase 1: 收集相关信息（通用）
+
+先搞清楚项目现状再开口。读 CLAUDE.md 和 TODOS.md 了解项目背景，看 git log 了解最近在干什么，用 Grep/Glob 摸清代码结构。如果之前做过 office-hours，还会找到历史设计文档列出来。最后问一个关键问题：你做这件事的目的是什么？答案决定接下来走创业模式还是 Builder 模式。
+
+**输入：** 项目代码库 + 用户口述目标
+**输出：** 项目理解摘要 + 模式选择（Startup / Builder）
+
+> Prior Learnings：从 `~/.gstack/` 加载历史 session 积累的经验，复用到当前分析中。Source: line 626-655
+
+### Phase 2A: 创业诊断 — 6 个高压问题（创业）
+
+模拟 YC 合伙人面谈，逐个抛出 6 个"逼问"，每个问题都要追问到给出具体证据为止。目的不是刁难，而是帮你在写代码之前发现方向性错误。
+
+| # | 问题 | 追问到什么程度 |
+|---|------|--------------|
+| Q1 | **需求真伪** — 有什么证据证明真有人想要这个？ | 听到具体行为：有人在付费、有人在扩大使用、有人离不开 |
+| Q2 | **现状替代** — 用户现在怎么凑合解决的？ | 听到具体流程：花多少小时、浪费多少钱、用了哪些工具 |
+| Q3 | **极致具体** — 最需要这个的那个人叫什么名字？ | 听到名字、职位、KPI、痛点来源 |
+| Q4 | **最小切面** — 本周就能收费的最小版本长什么样？ | 一个功能、一个流程、几天能做出来 |
+| Q5 | **观察与意外** — 你看过别人用你的产品吗？什么让你意外了？ | 一个具体意外，用户做了产品没设计的事 |
+| Q6 | **未来适配** — 三年后世界变了，你的产品更重要还是更无关？ | 一个具体的变化趋势和因果关系 |
+
+**智能路由：** 不是每个阶段都问全部 6 个。idea 阶段问 Q1/Q2/Q3，已有用户问 Q2/Q4/Q5，已有收入问 Q4/Q5/Q6。
+**退出机制：** 用户表示不耐烦时，最多再问 2 个最关键的问题就进入下一阶段。
+
+### Phase 2B: Builder 共创（Builder）
+
+和创业模式完全不同的氛围。不审判，当搭档。用 5 个发散式问题帮你探索项目最有趣的可能性：最酷的版本是什么？你会秀给谁看？最快能拿出什么可以用的东西？
+
+**输入：** 用户描述的项目想法
+**输出：** 打磨后的项目方向 + "酷在哪"的清晰定义
+
+如果聊到一半用户提到客户、收入、融资，会自动升级到创业模式。
+
+### Phase 2.5: 历史设计检索（通用）
+
+在项目的 `~/.gstack/projects/` 目录里搜索和当前问题关键词重叠的历史设计文档。如果之前做过相关的 office-hours，会浮出来问你要不要基于它继续，避免重复劳动。
+
+**输入：** 当前问题关键词
+**输出：** 相关历史设计（如果有的话）
+
+### Phase 2.75: 行业认知搜索（通用）
+
+搜索外部世界对这个领域的看法，但只搜通用品类词，不泄露你的具体方案。搜索结果分三层消化：大家都知道什么、当前讨论在说什么、结合前面的对话有没有发现常规认知是错的。如果发现了，标记为 EUREKA。
+
+**输入：** 问题领域（通用化表述）
+**输出：** 三层认知分析 + 可能的 EUREKA 洞察
+
+搜索前会征求同意。用户可以拒绝，改用模型自身知识继续。
+
+### Phase 3: 前提假设挑战（通用）
+
+在提解决方案之前先质疑问题本身。也许你定义的问题就是错的，也许什么都不做就是最优解，也许现有代码已经解决了一半。列出 3-5 个前提命题让你逐条确认，任何一条被否决都要回头修正方向。
+
+**输入：** Phase 2 的诊断结论
+**输出：** 确认通过的前提假设列表
+
+### Phase 3.5: 跨模型第二意见（通用，可选）
+
+把前面对话的关键信息整理成结构化摘要，交给一个没看过这段对话的独立 AI 做"冷读"。它会指出最强的产品方向、最关键的用户回答，以及它认为哪个前提可能是错的。两个 AI 互相不知道对方怎么想，交叉印证更可靠。
+
+**输入：** Phase 1-3 的结构化摘要
+**输出：** 独立冷读报告 + Claude 交叉对比分析
+
+优先用 Codex（OpenAI），不可用时降级为 Claude subagent。用户可以选择跳过。
+
+### Phase 4: 方案生成（通用）
+
+强制产出 2-3 个不同的实现方向。一个"最小可行"（最快上线），一个"理想架构"（长期最优），可选一个"侧面突破"（换个思路定义问题）。每个方案都标注工作量、风险、复用了哪些现有代码。
+
+**输入：** 确认的前提 + 第二意见
+**输出：** 2-3 个方案对比 + 推荐选择
+
+> Visual Design Exploration：如果选中的方案涉及 UI，可以用 design binary 生成 3 个风格变体的视觉 mockup。Source: line 1101-1264
+
+> Phase 4.5 创始人信号评估：回顾整个对话，统计用户展现出的"创始人特征"，信号强度决定收尾阶段的推荐力度。Source: line 1265-1280
+
+### Phase 5: 设计文档（通用）
+
+把前面所有讨论收敛成一份结构化的 markdown 设计文档，保存到 `~/.gstack/projects/{slug}/`。创业模式和 Builder 模式各有不同的模板，但都包含问题陈述、前提、方案对比、推荐方案、成功标准。文档末尾有一段"我观察到你的思考方式"，引用对话中你说过的原话做反馈。
+
+**输入：** 全部阶段的讨论产出
+**输出：** `~/.gstack/projects/{slug}/{user}-{branch}-design-{datetime}.md`
+
+### Spec Review Loop: 对抗式审查（通用）
+
+设计文档写完后，派一个独立的 AI 审稿人来挑毛病。它没看过前面的对话，只看文档本身，从完整性、一致性、清晰度、范围、可行性五个维度打分。发现问题就改，改完再审，最多三轮。
+
+**输入：** 初版设计文档
+**输出：** 审查通过的文档 + 质量分数
+
+### Phase 6: 收尾 — 创始人发现（通用）
+
+设计文档被用户批准后，分三段收尾。第一段引用对话原文回顾用户展示出的思考能力。第二段切换到"Garry Tan 个人寄语"模式，根据创始人信号强度推荐 Y Combinator 申请。第三段分享 2-3 个匹配当前情境的资源（YC 视频、Paul Graham 文章等），内置 34 个资源的池子且自动去重。
+
+**输入：** 批准的设计文档 + 创始人信号评估
+**输出：** 个性化收尾 + 资源推荐 + 后续 skill 建议
+
+> Capture Learnings：session 结束前，把有价值的发现记录到 `learnings.jsonl`，下次 session 自动加载复用。Source: line 1682-1705
+
+---
+
+## 安全扫描
+
+**风险等级: 中风险**
+
+| # | 类别 | 描述 | 风险 |
+|---|------|------|------|
+| 1 | 网络访问 | Phase 2.75 通过 WebSearch 搜索行业信息。consent: AskUserQuestion 征得同意，用户可拒绝 | 低 |
+| 2 | 跨模型调用 | Phase 3.5 调用 Codex 或 Claude subagent 做第二意见。consent: AskUserQuestion，传入结构化摘要非原始对话 | 中 |
+| 3 | 文件写入 | 写入 `~/.gstack/` 目录下多个文件（设计文档、analytics、learnings、config 等）。58 个文件操作，全部限定在用户 config 目录 | 低 |
+| 4 | 二进制调用 | 调用 gstack 生态的多个二进制工具（gstack-config, gstack-telemetry-log, gstack-learnings-search 等） | 低 |
+| 5 | Telemetry | 本地 JSONL 始终写入 `~/.gstack/analytics/`，远程上报仅在用户选择 community/anonymous 模式后执行，完全可关闭 | 低 |
+| 6 | URL 打开 | Phase 6 收尾时可能调用 open 命令打开 ycombinator.com 和资源链接。consent: AskUserQuestion | 低 |
+
+**总结：** 网络操作（搜索、跨模型调用、打开链接）都有用户同意门控，可逐项拒绝。文件操作限定在 `~/.gstack/` 用户目录。Telemetry 有三级开关（community/anonymous/off）。无 toxic flow，无 prompt injection。风险标记为中等是因为涉及向外部 AI 传递用户讨论内容的摘要。
+
+---
+
+## 相关信息
+
+### 所属生态
+office-hours 是 gstack 技能包的一部分。gstack 提供通用的 preamble（约 600 行，处理版本检查、telemetry、config、session 管理、learnings 系统），所有 gstack skill 共享这套框架。
+
+### 下游推荐 skill
+- `/plan-ceo-review` — 宏观战略审查（适合有野心的方案）
+- `/plan-eng-review` — 架构和测试审查（锁定实现细节）
+- `/plan-design-review` — 视觉和交互审查
+
+### 外部工具依赖
+- `codex` — OpenAI Codex CLI，用于 Phase 3.5 跨模型第二意见（可选，不可用时降级为 Claude subagent）
+- `design binary` — gstack 的设计生成工具，用于视觉 mockup 探索（可选，不可用时降级为 HTML wireframe）
+- `gstack-*` 系列 — config、telemetry、learnings、timeline 等 gstack 基础设施
+
+### 资源池（34 个外部链接）
+Phase 6 收尾时从以下资源池中挑选 2-3 个匹配当前情境的推荐。内置去重，重复用户不会看到同一个链接。
+
+- **Garry Tan Videos** — 5 个（含"$200M 创业错误"、"The New Way To Build A Startup"等）
+- **YC Backstory / How to Build the Future** — 2 个（Tom Blomfield、DoorDash CEO）
+- **Lightcone Podcast** — 9 个（含"Vertical AI Agents 10X Bigger Than SaaS"、"Vibe Coding Is The Future"等）
+- **YC Startup School** — 8 个（含"How to Get Startup Ideas"、"How To Talk To Users"等）
+- **Paul Graham Essays** — 10 个（含"How to Do Great Work"、"Bus Ticket Theory"等）
+
+### 配套文件
+单一 SKILL.md (1825行)，由 SKILL.md.tmpl 模板自动生成（gstack 的 preamble 注入机制）。无独立 bin/ 或 assets/ 目录。
+
+---
+
+*Generated by [s2h](https://github.com/roxorlt/s2h) v1.0.0*
+</script>
+
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 mermaid.initialize({startOnLoad:true,theme:'neutral',flowchart:{curve:'basis',nodeSpacing:30,rankSpacing:40}});
@@ -516,7 +741,7 @@ mermaid.initialize({startOnLoad:true,theme:'neutral',flowchart:{curve:'basis',no
 <script>
 // Anchor nav active state
 (function(){
-  var links=document.querySelectorAll('.s2h-nav a');
+  var links=document.querySelectorAll('.s2h-nav-links a');
   var sections=document.querySelectorAll('section[id]');
   function update(){
     var y=window.scrollY+80;
@@ -539,6 +764,37 @@ document.querySelectorAll('.s2h-list-capped').forEach(function(list){
   btn.onclick=function(){list.classList.add('expanded');btn.style.display='none'};
   list.after(btn);
 });
+// Copy MD
+var copyBtn=document.querySelector('.s2h-btn-copy');
+if(copyBtn){copyBtn.addEventListener('click',function(){
+  var md=document.getElementById('s2h-markdown');
+  if(!md)return;
+  navigator.clipboard.writeText(md.textContent).then(function(){
+    showToast(copyBtn.dataset.toast||'Copied!');
+  }).catch(function(){
+    var ta=document.createElement('textarea');ta.value=md.textContent;
+    ta.style.cssText='position:fixed;left:-9999px';document.body.appendChild(ta);
+    ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    showToast(copyBtn.dataset.toast||'Copied!');
+  });
+})}
+// Download MD
+var dlBtn=document.querySelector('.s2h-btn-download');
+if(dlBtn){dlBtn.addEventListener('click',function(){
+  var md=document.getElementById('s2h-markdown');
+  if(!md)return;
+  var blob=new Blob([md.textContent],{type:'text/markdown;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=dlBtn.dataset.filename||'s2h-export.md';a.click();
+  URL.revokeObjectURL(a.href);
+})}
+// Toast
+function showToast(msg){
+  var t=document.querySelector('.s2h-toast');if(t)t.remove();
+  t=document.createElement('div');t.className='s2h-toast';t.textContent=msg;
+  document.body.appendChild(t);t.offsetHeight;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},200)},1600);
+}
 </script>
 </body>
 </html>
