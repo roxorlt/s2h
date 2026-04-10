@@ -107,7 +107,7 @@ echo "S2H_LANG: $_S2H_LANG"
 每次 `/s2h` 调用时，先执行以下初始化：
 
 ```bash
-S2H_VERSION="1.0.0"
+S2H_VERSION="1.1.0"
 S2H_HOME="$HOME/.s2h"
 S2H_SKILL_DIR="$HOME/.claude/skills/s2h"
 mkdir -p "$S2H_HOME"
